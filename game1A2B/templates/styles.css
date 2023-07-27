@@ -1,0 +1,33 @@
+
+h1 {
+    border: 2px solid black;
+    color: lightblue;
+    text-align: center;
+    background-color: darkblue;
+    width: full;
+    height: 50px;
+    padding: 20px;
+    margin: 20px;
+}
+
+body {
+    color: darkgray;
+    text-align: center;
+    background-color: lightblue;
+
+}
+
+div {
+    background-color: lightyellow;
+    width: full;
+    height: 400px;
+    padding: 50px;
+    margin: 20px;
+}
+
+button {
+    background-color: orange;
+}
+button:hovor {
+    background-color: red;
+}
