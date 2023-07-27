@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Guess the Number</h1>
+    <button onclick="startNewGame()">New Game</button>
+    <input type="text" id="guess" maxlength="4">
+    <button onclick="sendGuess()">Guess</button>
+    <ol>
+        <div id="result">Result:</div>
+    </ol>
+
+    <p id="guessCount">Guess Count: 0</p>
+
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on('connect', function() {
+            console.log('Connected');
+        });
+
+        socket.on('result', function(data) {
+            var resultDiv = document.getElementById('result');
+            var resultLine = document.createElement('div');
+            resultLine.textContent = data.result;
+            resultDiv.appendChild(resultLine);
+
+            var guessCount = document.getElementById('guessCount');
+            guessCount.textContent = "Guess Count: " + data.guess_count;
+
+            if (data.game_over) {
+                document.getElementById('guess').disabled = true;
+            }
+        });
+
+        function sendGuess() {
+            var guess = document.getElementById('guess').value;
+            if (guess.length === 4) {
+                socket.emit('guess', {guess: guess});
+                document.getElementById('guess').value = "";
+            } else {
+                alert("Please enter a 4-digit number.");
+            }
+        }
+
+        function startNewGame() {
+            socket.emit('new_game');
+            document.getElementById('guess').disabled = false;
+            document.getElementById('result').innerHTML = "";
+        }
+    </script>
+</body>
+</html>
